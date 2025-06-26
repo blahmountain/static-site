@@ -33,8 +33,28 @@ jobs:
       - name: Build with Next.js 🏗️
         run: npx next build
 
-      - name: List build output
-        run: ls -la . # verify directory exists
+      - name: Check Next.js version
+        run: npx next --version
+
+      - name: List all directories after build
+        run: |
+          echo "=== Current directory contents ==="
+          ls -la .
+          echo "=== .next directory exists? ==="
+          ls -la .next || echo ".next not found"
+          echo "=== out directory exists? ==="
+          ls -la out || echo "out not found"
+
+      - name: Verify output directory
+        run: |
+          if [ -d "out" ]; then
+            echo "✅ out directory exists"
+            ls -la out
+          else
+            echo "❌ out directory missing"
+            echo "Contents of current directory:"
+            ls -la .
+          fi
 
       - name: Upload artifact 📡
         uses: actions/upload-pages-artifact@v3
